@@ -68,6 +68,7 @@
 <script src="./screenshot.js"></script>
 <script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
 <script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
+<script src="./custom_generator.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -110,6 +111,8 @@ function configurePlayground(playground) {
       // Refresh theme.
       ws.setTheme(ws.getTheme());
     });
+    // 커스텀 generator 렌더
+    playground.addGenerator('Vim', codelabGenerator)
 }
 
 function initPlayground() {
@@ -141,7 +144,8 @@ function initPlayground() {
           drag: true,
           wheel: false,
         },
-        toolbox: toolboxCategories,
+        //toolbox: toolboxCategories,
+        toolbox: codelabToolbox,
         toolboxPosition: 'start',
         renderer: 'geras',
         zoom:
