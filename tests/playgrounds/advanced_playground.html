@@ -69,8 +69,8 @@
 <script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
 <script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
 <script src="./custom_generator.js"></script>
+<script src="./viml_blocks.js"></script>
 <script src="./viml_generator.js"></script>
-
 
 <script>
 // Custom requires for the playground.
@@ -114,8 +114,9 @@ function configurePlayground(playground) {
       ws.setTheme(ws.getTheme());
     });
     // 커스텀 generator 렌더
-    playground.addGenerator('Vim', codelabGenerator)
-}
+    playground.addGenerator('Vim', vimlangGenerator)
+    playground.addGenerator('Json', codelabGenerator)
+  }
 
 function initPlayground() {
   if (typeof window.createPlayground === 'undefined') {
