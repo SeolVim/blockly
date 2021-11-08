@@ -69,6 +69,8 @@
 <script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
 <script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
 <script src="./custom_generator.js"></script>
+<script src="./viml_generator.js"></script>
+
 
 <script>
 // Custom requires for the playground.
@@ -145,7 +147,8 @@ function initPlayground() {
           wheel: false,
         },
         //toolbox: toolboxCategories,
-        toolbox: codelabToolbox,
+        //toolbox: codelabToolbox,
+        toolbox: toolbox,
         toolboxPosition: 'start',
         renderer: 'geras',
         zoom:
