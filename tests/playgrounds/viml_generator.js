@@ -11,7 +11,23 @@ vimlangGenerator.PRECEDENCE = 0;
  */
 
 vimlangGenerator['vim::literal::number'] = function(block) {
-    //const code = Number(block.getFieldValue('num_value'));
+    let base = block.getFieldValue('num_base'); 
+    switch (base){
+        case '2':
+            base = '0b'
+            break;
+        case '8':
+	    base = '0o'
+            break;
+        case '16': 
+            base = '0x'
+            break;
+        case '10':
+            base = ''
+            break;
+    }
+    const value = Number(block.getFieldValue('num_value'));
     // option 을 받아와야 bin/oct/hex값 구분할 수 있음.
-    return ['this_is_string_dummy_return', vimlangGenerator.PRECEDENCE];
+    var code = base + value
+    return [code, vimlangGenerator.PRECEDENCE];
 }
