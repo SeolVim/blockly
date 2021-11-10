@@ -31,3 +31,18 @@ vimlangGenerator['vim::literal::number'] = function(block) {
     var code = base + value
     return [code, vimlangGenerator.PRECEDENCE];
 }
+
+vimlangGenerator['vim::literal::float'] = function(block) {
+    const value = block.getFieldValue('num_value');
+    const valueArray = value.split('.');
+    const integerPart = valueArray[0];
+    var fractionalPart = valueArray[1];
+    // check output format for floating point
+    // should it be like 1.3e+3, -0.2e-5 ... or be like 2.468
+    if (fractionalPart.length >= 6){
+        fractionalPart 
+    }
+    var code = valueArray[0]
+    
+    return [code, vimlangGenerator.PRECEDENCE];
+}
