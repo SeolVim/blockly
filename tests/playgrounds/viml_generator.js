@@ -64,7 +64,76 @@ vimlangGenerator['vim::literal::float'] = function(block) {
     return [code, vimlangGenerator.PRECEDENCE];
 }
 
+// string 안에서 작은 따옴표, 큰 따옴표 사용에 제약을 걸어야 하지 않나
 vimlangGenerator['vim::literal::string'] = function(block) {
     const code = block.getFieldValue('str_value');
+    return '"' + code + '"' ;
+}
+
+vimlangGenerator['vim::literal::literal_string'] = function(block) {
+    const code = block.getFieldValue('str_value');
+    return "'" + code + "'" ;
+}
+
+// Blob (Binary Large OBject)
+vimlangGenerator['vim::literal::blob'] = function(block) {
+    var code = block.getFieldValue('byte_value');
+    code = '0z' + code;
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
+// vim::literal::true, false, none, null 점검필요
+vimlangGenerator['vim::literal::true'] = function(block) {
+    // if str >> v:true
+    // if num >> true || 1
+    return 'v:true';
+}
+
+vimlangGenerator['vim::literal::false'] = function(block) {
+    // if str >> v:false
+    // if num >> false || 1
+    return 'v:false';
+}
+
+vimlangGenerator['vim::literal::none'] = function(block) {
+    // if str >> v:none
+    // if num >> 0 
+    return 'v:none';
+}
+
+vimlangGenerator['vim::literal::null'] = function(block) {
+    // if str >> v:null
+    // if num >> 0
+    return 'v:null';
+}
+
+vimlangGenerator['vim::let'] = functioin(block) {
+    let operator = block.getFieldValue('op');
+    switch (operator){
+        case 'assign':
+            base = 'Assign'
+            break;
+        case 'add':
+	    base = 'Add'
+            break;
+        case 'sub': 
+            base = 'Subtract'
+            break;
+        case 'mul':
+            base = 'Multiply'
+            break;
+        case 'div':
+            base = 'Divide'
+            break;
+        case 'mod':
+            base = 'Modulo'
+            break;
+        case 'concat':
+            base = 'Concatenate'
+            break;
+    }
+    const value = Number(block.getFieldValue('num_value'));
+    // option 을 받아와야 bin/oct/hex값 구분할 수 있음.
+    var code = base + value
     return [code, vimlangGenerator.PRECEDENCE];
 }
