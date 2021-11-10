@@ -32,17 +32,39 @@ vimlangGenerator['vim::literal::number'] = function(block) {
     return [code, vimlangGenerator.PRECEDENCE];
 }
 
+// [ignore this code section]
+// 숫자가 너무 길면 (e표시->일반) ex) -0.00004508 >> -4.508e-5
+// 숫자가 너무 짧으면 (일반->e표시) ex) 0.1e-1 >> 0.001
+/*
 vimlangGenerator['vim::literal::float'] = function(block) {
     const value = block.getFieldValue('num_value');
     const valueArray = value.split('.');
     const integerPart = valueArray[0];
     var fractionalPart = valueArray[1];
+    var code = '';
     // check output format for floating point
     // should it be like 1.3e+3, -0.2e-5 ... or be like 2.468
-    if (fractionalPart.length >= 6){
-        fractionalPart 
+    var flag = false;
+    for (var i=0; i<fractionalPart.length; i++){
+        if(fractionalPart.charAt(i) != '0'){
+	    flag = true;
+        }
+        if(flag){
+            code += fractionalPart.charAt(i);
+        }
     }
-    var code = valueArray[0]
+    code = valueArray[0]
     
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+*/
+
+vimlangGenerator['vim::literal::float'] = function(block) {
+    const code = block.getFieldValue('num_value');
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
+vimlangGenerator['vim::literal::string'] = function(block) {
+    const code = block.getFieldValue('str_value');
     return [code, vimlangGenerator.PRECEDENCE];
 }
