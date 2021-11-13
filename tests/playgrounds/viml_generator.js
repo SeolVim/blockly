@@ -107,7 +107,7 @@ vimlangGenerator['vim::literal::null'] = function(block) {
     return 'v:null';
 }
 
-vimlangGenerator['vim::let'] = functioin(block) {
+vimlangGenerator['vim::let'] = function(block) {
     let operator = block.getFieldValue('op');
     switch (operator){
         case 'assign':
@@ -132,8 +132,73 @@ vimlangGenerator['vim::let'] = functioin(block) {
             base = 'Concatenate'
             break;
     }
-    const value = Number(block.getFieldValue('num_value'));
+    operator = String(operator)
     // option 을 받아와야 bin/oct/hex값 구분할 수 있음.
-    var code = base + value
+    return [operator, vimlangGenerator.PRECEDENCE];
+}
+
+vimlangGenerator['vim::ident'] = function(block) {
+    let code = block.getFieldValue('var_ns');    // gets Json values from k:v
+    let varName = block.getFieldValue('var_name');
+    code = code + ':' + varName;
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
+vimlangGenerator['vim::operator::add'] = function(block) {
+    let term1 = vimlangGenerator.valueToCode(block, 'term1', 
+		    vimlangGenerator.PRECEDENCE);
+    let term2 = vimlangGenerator.valueToCode(block, 'term2', 
+		    vimlangGenerator.PRECEDENCE);
+    code = term1 + ' + ' + term2;
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
+vimlangGenerator['vim::operator::sub'] = function(block) {
+    let term1 = vimlangGenerator.valueToCode(block, 'term1', 
+		    vimlangGenerator.PRECEDENCE);
+    let term2 = vimlangGenerator.valueToCode(block, 'term2', 
+		    vimlangGenerator.PRECEDENCE);
+    code = term1 + ' - ' + term2;
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
+vimlangGenerator['vim::operator::mul'] = function(block) {
+    let term1 = vimlangGenerator.valueToCode(block, 'term1', 
+		    vimlangGenerator.PRECEDENCE);
+    let term2 = vimlangGenerator.valueToCode(block, 'term2', 
+		    vimlangGenerator.PRECEDENCE);
+    code = term1 + ' * ' + term2;
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
+vimlangGenerator['vim::operator::div'] = function(block) {
+    let term1 = vimlangGenerator.valueToCode(block, 'term1', 
+		    vimlangGenerator.PRECEDENCE);
+    let term2 = vimlangGenerator.valueToCode(block, 'term2', 
+		    vimlangGenerator.PRECEDENCE);
+    code = term1 + ' / ' + term2;
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
+vimlangGenerator['vim::operator::mod'] = function(block) {
+    let term1 = vimlangGenerator.valueToCode(block, 'term1', 
+		    vimlangGenerator.PRECEDENCE);
+    let term2 = vimlangGenerator.valueToCode(block, 'term2', 
+		    vimlangGenerator.PRECEDENCE);
+    code = term1 + ' % ' + term2;
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
+vimlangGenerator['vim::operator::unary_add'] = function(block) {
+    let code = vimlangGenerator.valueToCode(block, 'base', 
+		    vimlangGenerator.PRECEDENCE);
+    code = '(+' + code + ')'
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
+vimlangGenerator['vim::operator::unary_sub'] = function(block) {
+    let code = vimlangGenerator.valueToCode(block, 'base', 
+		    vimlangGenerator.PRECEDENCE);
+    code = '(+' + code + ')'
     return [code, vimlangGenerator.PRECEDENCE];
 }
