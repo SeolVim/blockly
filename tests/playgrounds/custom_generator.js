@@ -149,7 +149,7 @@ codelabGenerator['lists_create_with'] = function(block) {
 codelabGenerator['object'] = function(block) {
     const statement_members = codelabGenerator.statementToCode(block, 'MEMBERS'); //두번째 @param에 연결된 블록들을 찾아서 바꾸고 str로 반환
 
-    // valueToCode는 연결된 블록을 찾고
+    // statementToCode는 연결된 블록을 찾고
     // 해당 블록에 대한 코드를 생성하고
     // 생성된 코드를 string으로 반환함. (연결된 블록이 없으면 null반환)
     // 물론 맞닿은 블록이 없는 경우에는 기본값을 바꾸어 주어야 할 경우 생김.
