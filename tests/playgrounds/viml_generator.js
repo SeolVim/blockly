@@ -111,25 +111,25 @@ vimlangGenerator['vim::let'] = function(block) {
     let operator = block.getFieldValue('op');
     switch (operator){
         case 'assign':
-            base = 'Assign'
+            operator = 'Assign'
             break;
         case 'add':
-	    base = 'Add'
+	    operator = 'Add'
             break;
         case 'sub': 
-            base = 'Subtract'
+            operator = 'Subtract'
             break;
         case 'mul':
-            base = 'Multiply'
+            operator = 'Multiply'
             break;
         case 'div':
-            base = 'Divide'
+            operator = 'Divide'
             break;
         case 'mod':
-            base = 'Modulo'
+            operator = 'Modulo'
             break;
         case 'concat':
-            base = 'Concatenate'
+            operator = 'Concatenate'
             break;
     }
     operator = String(operator)
@@ -202,3 +202,69 @@ vimlangGenerator['vim::operator::unary_sub'] = function(block) {
     code = '(+' + code + ')'
     return [code, vimlangGenerator.PRECEDENCE];
 }
+
+vimlangGenerator['vim::operator::concat'] = function(block) {
+    let term1 = vimlangGenerator.statementToCode(block, 'term1') || '0';
+    let term1_noindent = term1.trim();
+    let term2 = vimlangGenerator.statementToCode(block, 'term2') || '0';
+    let term2_noindent = term2.trim();
+    code = term1_noindent + '..' + term2_noindent;
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
+vimlangGenerator['vim::operator::cmp'] = function(block) {
+    let lhs = vimlangGenerator.valueToCode(block, 'lhs', 
+                              vimlangGenerator.PRECEDENCE);
+    let rhs = vimlangGenerator.valueToCode(block, 'rhs', 
+                              vimlangGenerator.PRECEDENCE);
+    let _case = block.getFieldValue('case');
+    let comp = block.getFieldValue('comparator');
+    let code;
+    switch (_case){
+        case '':
+	    _case = ''
+            break;
+        case '#':
+	    _case = '#'
+            break;
+        case '?':
+	    _case = '?'
+            break;
+    }
+    
+    switch (comp){
+        case '==':
+            comp = '=='
+	    break;
+        case '!=':
+            comp = '!='
+	    break;
+        case '>':
+            comp = '>'
+	    break;
+        case '>=':
+            comp = '>='
+	    break;
+        case '<':
+            comp = '<'
+	    break;
+        case '<=':
+            comp = '<='
+	    break;
+        case '=~':
+            comp = '=~'
+	    break;
+        case '!~':
+            comp = '!~'
+	    break;
+        case 'is':
+            comp = 'is'
+	    break;
+        case 'isnot':
+            comp = 'isnot'
+	    break;
+    }
+    code = lhs + ' ' + comp + _case  + ' ' + rhs; 
+    return [code, vimlangGenerator.PRECEDENCE];
+}
+
